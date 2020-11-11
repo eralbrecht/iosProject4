@@ -9,44 +9,61 @@ import Foundation
 
 struct StorageHandler {
     static var defaultStorage: UserDefaults = UserDefaults.standard
+    static let defaultKey = "ColorCollection"
     
-    static func getStorage(key: String) -> [[Int]] {
-        var colorArrays: [[Int]]
-
-        if isSet(key: key) {
-            colorArrays = UserDefaults.standard.dictionaryRepresentation()[key] as! [[Int]]
-        } else {
-            colorArrays = [[]]
+    static func getStorage() {
+        if isSet(key: self.defaultKey) {
+            let encodedString = UserDefaults.standard.dictionaryRepresentation()[self.defaultKey] as! String
+            
+            ColorManager.colorCollection = decodeCollection(encodedString.data(using: .utf8)!)
         }
-        
-        return colorArrays
     }
     
     static func isSet(key: String) -> Bool {
         return UserDefaults.standard.object(forKey: key) != nil
     }
     
-    static func set(value: [Int]) {
-        var colorArrays: [[Int]]
-
-        if isSet(key: "myColors") {
-            colorArrays = UserDefaults.standard.dictionaryRepresentation()["myColors"] as! [[Int]]
-            colorArrays.append(value)
-        } else {
-            colorArrays = [value] // [[Int]]
-            // colorArrays = new Array(Int) { value }
+    static func set(value: Color) {
+        ColorManager.colorCollection.append(value)
+        
+        defaultStorage.set(encodeCollection(), forKey: self.defaultKey)
+    }
+    
+    static func encodeCollection() -> String {
+        // Our JSON Encoder
+        let encoder = JSONEncoder()
+        
+        /**
+         * We attempt to encode the Color array that is part of ColorManager
+         * If this fails in any way, we simply return an empty string to be stored
+         * Otherwise, we then convert that encoded JSON data to a string and return that
+         */
+        guard let encoded = try? encoder.encode(ColorManager.colorCollection)
+        else{
+            return ""
+        }
+        print(storageCount())
+        //If encoded succeeded, we convert the JSON to a simple string and return that
+        guard let stringEncoded = String(data: encoded, encoding: .utf8)
+        else {
+            return ""
+        }
+        return stringEncoded
+    }
+    
+    static func decodeCollection(_ encodedString: Data) -> [Color] {
+        let decoder = JSONDecoder()
+        guard let decoded = try? decoder.decode([Color].self, from: encodedString)
+        else {
+            let newColorCollection: [Color] = []
+            return newColorCollection
         }
         
-        defaultStorage.set(colorArrays, forKey: "myColors")
+        return decoded
     }
 
     static func storageCount() -> Int {
-        if isSet(key: "myColors") {
-            let colorArrays: [[Int]] = UserDefaults.standard.dictionaryRepresentation()["myColors"] as! [[Int]]
-            return colorArrays.count
-        } else {
-            return 0
-        }
+        return ColorManager.colorCollection.count
     }
 }
 

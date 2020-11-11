@@ -35,9 +35,9 @@ extension SwatchesViewController {
   ) -> UICollectionViewCell {
 
     // Get the corresponding color
-    let cellColorsArray = StorageHandler.getStorage(key: "myColors")
+    let cellColorsArray = ColorManager.colorCollection
     let cellColorArray = cellColorsArray[indexPath.item]
-    let cellColor = UIColor(red: CGFloat(cellColorArray[0])/255, green: CGFloat(cellColorArray[1])/255, blue: CGFloat(cellColorArray[2])/255, alpha: 1.0)
+    let cellColor = UIColor(red: CGFloat(cellColorArray.red)/255, green: CGFloat(cellColorArray.green)/255, blue: CGFloat(cellColorArray.blue)/255, alpha: CGFloat(cellColorArray.alpha)/255)
     
     let cell = collectionView
       .dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
@@ -94,13 +94,14 @@ extension SwatchesViewController : UICollectionViewDelegateFlowLayout {
 
 extension SwatchesViewController {
   override func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-    let cellColorsArray = StorageHandler.getStorage(key: "myColors")
+    let cellColorsArray = ColorManager.colorCollection
     let cellColorArray = cellColorsArray[indexPath.item]
     let colorTab = tabBarController!.viewControllers![0] as! ViewController
 
-    colorTab.sliderR.value = Float(cellColorArray[0])
-    colorTab.sliderG.value = Float(cellColorArray[1])
-    colorTab.sliderB.value = Float(cellColorArray[2])
+    colorTab.sliderR.value = Float(cellColorArray.red)
+    colorTab.sliderG.value = Float(cellColorArray.green)
+    colorTab.sliderB.value = Float(cellColorArray.blue)
+    colorTab.sliderA.value = Float(cellColorArray.alpha)
     colorTab.adjustSlider(self)
 
     self.tabBarController!.selectedIndex = 0

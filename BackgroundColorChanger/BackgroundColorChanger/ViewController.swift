@@ -39,7 +39,9 @@ class ViewController: UIViewController {
         let inputGreen = Int(sliderG.value)
         let inputBlue = Int(sliderB.value)
         let inputAlpha = Int(sliderA.value)
-        StorageHandler.set(value: [inputRed, inputGreen, inputBlue])
+        
+        // sliders are reange 0 - 255, so we are passing the full value to storage
+        StorageHandler.set(value: Color(red: inputRed, green: inputGreen, blue: inputBlue, alpha: inputAlpha))
     }
     
     @IBAction func adjustSlider(_ sender: Any) {
@@ -78,6 +80,8 @@ class ViewController: UIViewController {
         sliderG.value = 255
         sliderB.value = 255
         sliderA.value = 255
+        
+        StorageHandler.getStorage()
     }
     
     @objc func keyboardWillShow(notification: NSNotification) {
