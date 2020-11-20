@@ -22,6 +22,13 @@ final class SwatchesViewController: UICollectionViewController {
     var slideUpView = UITableView()
     let slideUpViewHeight: CGFloat = 200
     
+    var currentlySelectedSwatch: IndexPath = []
+    
+    let slideUpViewDataSource: [Int: (String)] = [
+        0: ("Delete Color"),
+        1: ("Share Color")
+    ]
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -32,8 +39,44 @@ final class SwatchesViewController: UICollectionViewController {
         super.viewDidLoad()
         
         containerView.frame = MainViewController.frame
+        slideUpView.isScrollEnabled = true
+        slideUpView.delegate = self
+        slideUpView.dataSource = self
+        slideUpView.register(SlideUpViewCell.self, forCellReuseIdentifier: "SlideUpViewCell")
     }
 }
+
+
+extension SwatchesViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
+        slideUpViewDataSource.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "SlideUpViewCell", for: indexPath) as? SlideUpViewCell
+        else{
+            fatalError("unable to dequeue SlideUpViewCell")
+        }
+        
+        cell.labelView.text = slideUpViewDataSource[indexPath.row]
+        return cell
+    }
+    
+    func tableView(_tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat{
+        return 50
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.row == 0{
+            ColorManager.colorCollection.remove(at: currentlySelectedSwatch.row)
+            self.MainViewController.deleteItems(at: [currentlySelectedSwatch])
+            self.MainViewController.reloadItems(at: self.MainViewController.indexPathsForVisibleItems)
+            StorageHandler.set()
+            slideUpViewTapped()
+        }
+    }
+}
+
 
 extension SwatchesViewController {
   override func collectionView(_ collectionView: UICollectionView,
@@ -70,7 +113,7 @@ extension SwatchesViewController {
             if let indexPath = collectionView.indexPathForItem(at: point) {
                 //do stuff with cell for ex. print the indexPath
                 print(indexPath.row)
-                setupLongPressOverlay(swatchIndex: indexPath.row)
+                setupLongPressOverlay(swatchIndex: indexPath)
             }
             else{
                 print("could not find path")
@@ -78,12 +121,15 @@ extension SwatchesViewController {
         }
     }
     
-    func setupLongPressOverlay(swatchIndex: Int) {
+    func setupLongPressOverlay(swatchIndex: IndexPath) {
+        self.currentlySelectedSwatch = swatchIndex
+            
+            
         containerView.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.75)
         
         let screenSize = UIScreen.main.bounds.size
         slideUpView.frame = CGRect(x: 0, y: screenSize.height - (self.tabBarController?.tabBar.frame.size.height)!, width: screenSize.width, height: slideUpViewHeight)
-        slideUpView.separatorStyle = .singleLine
+        slideUpView.separatorStyle = .none
         
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: .curveEaseInOut, animations:{
                         self.containerView.alpha = 0.75

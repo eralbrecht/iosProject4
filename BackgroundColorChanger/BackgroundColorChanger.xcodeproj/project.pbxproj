@@ -17,6 +17,7 @@
 		26DEC7F92546B10A00A22096 /* UIExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26DEC7F82546B10A00A22096 /* UIExtensions.swift */; };
 		26DEC7FC2546B25700A22096 /* SwatchesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26DEC7FB2546B25700A22096 /* SwatchesViewController.swift */; };
 		AA170D172559FC5F005A47EE /* ColorObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA170D162559FC5F005A47EE /* ColorObjects.swift */; };
+		AAA35BFD25679BE80035FE91 /* SlideUpViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAA35BFC25679BE80035FE91 /* SlideUpViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		26DEC7F82546B10A00A22096 /* UIExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIExtensions.swift; sourceTree = "<group>"; };
 		26DEC7FB2546B25700A22096 /* SwatchesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwatchesViewController.swift; sourceTree = "<group>"; };
 		AA170D162559FC5F005A47EE /* ColorObjects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorObjects.swift; sourceTree = "<group>"; };
+		AAA35BFC25679BE80035FE91 /* SlideUpViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideUpViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,6 +77,7 @@
 				26DEC7F82546B10A00A22096 /* UIExtensions.swift */,
 				26DEC7FB2546B25700A22096 /* SwatchesViewController.swift */,
 				AA170D162559FC5F005A47EE /* ColorObjects.swift */,
+				AAA35BFC25679BE80035FE91 /* SlideUpViewCell.swift */,
 			);
 			path = BackgroundColorChanger;
 			sourceTree = "<group>";
@@ -150,6 +153,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				26587FA52521F1300023FC25 /* ViewController.swift in Sources */,
+				AAA35BFD25679BE80035FE91 /* SlideUpViewCell.swift in Sources */,
 				26587FA12521F1300023FC25 /* AppDelegate.swift in Sources */,
 				26DEC7F62546B0D300A22096 /* StorageHandler.swift in Sources */,
 				26DEC7F92546B10A00A22096 /* UIExtensions.swift in Sources */,

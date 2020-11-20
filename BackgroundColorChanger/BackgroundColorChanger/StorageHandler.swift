@@ -28,7 +28,10 @@ struct StorageHandler {
         
         defaultStorage.set(encodeCollection(), forKey: self.defaultKey)
     }
-    
+
+    static func set() {
+        defaultStorage.set(encodeCollection(), forKey: self.defaultKey)
+    }
     static func encodeCollection() -> String {
         // Our JSON Encoder
         let encoder = JSONEncoder()
