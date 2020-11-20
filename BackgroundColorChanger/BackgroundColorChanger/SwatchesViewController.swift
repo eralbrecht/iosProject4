@@ -16,10 +16,22 @@ final class SwatchesViewController: UICollectionViewController {
         right: 20.0)
     private let itemsPerRow: CGFloat = 3
     
+    @IBOutlet var MainViewController: UICollectionView!
+    
+    var containerView = UIView()
+    var slideUpView = UITableView()
+    let slideUpViewHeight: CGFloat = 200
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         self.loadView()
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        containerView.frame = MainViewController.frame
     }
 }
 
@@ -58,11 +70,38 @@ extension SwatchesViewController {
             if let indexPath = collectionView.indexPathForItem(at: point) {
                 //do stuff with cell for ex. print the indexPath
                 print(indexPath.row)
+                setupLongPressOverlay(swatchIndex: indexPath.row)
             }
             else{
                 print("could not find path")
             }
         }
+    }
+    
+    func setupLongPressOverlay(swatchIndex: Int) {
+        containerView.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.75)
+        
+        let screenSize = UIScreen.main.bounds.size
+        slideUpView.frame = CGRect(x: 0, y: screenSize.height - (self.tabBarController?.tabBar.frame.size.height)!, width: screenSize.width, height: slideUpViewHeight)
+        slideUpView.separatorStyle = .singleLine
+        
+        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: .curveEaseInOut, animations:{
+                        self.containerView.alpha = 0.75
+            self.slideUpView.frame = CGRect(x: 0, y: screenSize.height - self.slideUpViewHeight - (self.tabBarController?.tabBar.frame.size.height)!, width: screenSize.width, height: self.slideUpViewHeight)
+        }, completion: nil)
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(slideUpViewTapped))
+        containerView.addGestureRecognizer( tapGesture)
+        MainViewController.addSubview(containerView)
+        MainViewController.addSubview(slideUpView)
+    }
+    
+    @objc func slideUpViewTapped() {
+        let screenSize = UIScreen.main.bounds.size
+        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1.0, initialSpringVelocity: 1.0, options: .curveEaseInOut, animations: {
+            self.containerView.alpha = 0
+            self.slideUpView.frame = CGRect(x: 0, y: screenSize.height -  (self.tabBarController?.tabBar.frame.size.height)!, width: screenSize.width, height: self.slideUpViewHeight)
+            }, completion: nil)
     }
 }
 
