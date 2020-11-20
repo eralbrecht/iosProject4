@@ -73,6 +73,13 @@ extension SwatchesViewController: UITableViewDelegate, UITableViewDataSource {
             self.MainViewController.reloadItems(at: self.MainViewController.indexPathsForVisibleItems)
             StorageHandler.set()
             slideUpViewTapped()
+        } else if indexPath.row == 1 {
+            let shareText = "Check out my color: #" +  ColorManager.colorCollection [currentlySelectedSwatch.row].GetHex()
+            let shareImage = ColorManager.colorCollection [currentlySelectedSwatch.row].GetImage()
+            let shareAll = [shareText, shareImage] as [Any]
+            let activityViewController = UIActivityViewController(activityItems: shareAll, applicationActivities: nil)
+            activityViewController.popoverPresentationController?.sourceView = self.view
+            self.present(activityViewController, animated: true, completion: nil)
         }
     }
 }
